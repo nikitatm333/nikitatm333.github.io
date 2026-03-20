@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo 18 — Туториал для команд</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Unbounded:wght@400;700;900&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4aa;
+    --accent2: #0099ff;
+    --warn: #ff6b35;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --code-bg: #0d1520;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Mulish', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 600px;
+  }
+
+  /* Nav */
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 60px;
+  }
+
+  nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(0,212,170,0.05);
+  }
+
+  /* Sections */
+  section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.15s; }
+  section:nth-child(4) { animation-delay: 0.2s; }
+  section:nth-child(5) { animation-delay: 0.25s; }
+  section:nth-child(6) { animation-delay: 0.3s; }
+  section:nth-child(7) { animation-delay: 0.35s; }
+  section:nth-child(8) { animation-delay: 0.4s; }
+
+  h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--accent2);
+    margin: 28px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  p { margin-bottom: 16px; color: var(--text); }
+
+  /* Warning box */
+  .warn-box {
+    background: rgba(255,107,53,0.08);
+    border: 1px solid rgba(255,107,53,0.3);
+    border-left: 3px solid var(--warn);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 24px;
+    color: #ffa07a;
+    font-size: 14px;
+  }
+
+  .warn-box strong { color: var(--warn); }
+
+  /* Info box */
+  .info-box {
+    background: rgba(0,153,255,0.08);
+    border: 1px solid rgba(0,153,255,0.2);
+    border-left: 3px solid var(--accent2);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #93c5fd;
+  }
+
+  /* Rules list */
+  .rules {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rules li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+  }
+
+  .rules li:hover { border-color: var(--accent); }
+
+  .rule-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(0,212,170,0.1);
+    padding: 2px 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin-bottom: 24px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead tr {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  td a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  td a:hover { color: var(--accent); text-decoration: underline; }
+
+  .port-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: rgba(0,212,170,0.1);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 24px; }
+
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .step:hover { border-color: rgba(0,212,170,0.3); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    background: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .step-body { padding: 20px; }
+
+  /* Code blocks */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 12px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+  }
+
+  .copy-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+
+  pre {
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #a8d8b9;
+  }
+
+  .comment { color: var(--text-muted); }
+  .key { color: #79b8ff; }
+  .val { color: #ffab70; }
+  .str { color: #a8d8b9; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: rgba(0,212,170,0.1);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  /* Commands grid */
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 12px;
+  }
+
+  .cmd-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+
+  .cmd-item:hover { border-color: rgba(0,212,170,0.3); }
+
+  .cmd-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .cmd-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* Form table */
+  .form-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .form-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 10px 16px;
+    text-align: left;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .form-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .form-table tr:last-child td { border-bottom: none; }
+  .form-table .field { color: #79b8ff; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .form-table .important { color: var(--warn); font-weight: 600; }
+
+  /* Troubleshoot */
+  .trouble-list { display: flex; flex-direction: column; gap: 16px; }
+
+  .trouble-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .trouble-q {
+    padding: 14px 18px;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    font-size: 14px;
+  }
+
+  .trouble-a { padding: 14px 18px; font-size: 14px; color: var(--text-muted); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  footer strong { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .cmd-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">URFU PROJECT · 2026</div>
+    <h1>Odoo 18 CE<br>Туториал для команд</h1>
+    <p class="subtitle">Развёртывание изолированного контейнера с Odoo на коммунальном сервере. Читай внимательно — сервер общий.</p>
+  </header>
+
+  <nav>
+    <a href="#rules">Правила</a>
+    <a href="#ports">Порты</a>
+    <a href="#deploy">Развёртывание</a>
+    <a href="#first-login">Первый вход</a>
+    <a href="#commands">Команды</a>
+    <a href="#backup">Бэкап</a>
+    <a href="#troubleshoot">Проблемы</a>
+  </nav>
+
+  <!-- Доступ -->
+  <section>
+    <h2>Доступ к серверу</h2>
+    <p>Для получения SSH доступа напишите старшему админу <strong>Никите Томилину</strong> или Игорю — они выдадут логин и пароль.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre>ssh ВАШ_ЛОГИН@204.12.253.210</pre>
+    </div>
+  </section>
+
+  <!-- Правила -->
+  <section id="rules">
+    <h2>Правила коммунального сервера</h2>
+    <div class="warn-box"><strong>⚠️ Важно:</strong> Сервер общий — нарушение правил ломает работу других команд!</div>
+    <ul class="rules">
+      <li><span class="rule-num">01</span> Работай только в своей папке — <code>/home/ВАШ_ЛОГИН/</code></li>
+      <li><span class="rule-num">02</span> Не трогай чужие контейнеры — <code>docker stop/rm/restart</code> только своих</li>
+      <li><span class="rule-num">03</span> Используй только свой порт из таблицы ниже</li>
+      <li><span class="rule-num">04</span> Называй контейнеры и тома с префиксом своей команды</li>
+      <li><span class="rule-num">05</span> Не меняй системные настройки без согласования со старшим админом</li>
+      <li><span class="rule-num">06</span> Делай бэкап перед любыми экспериментами</li>
+    </ul>
+  </section>
+
+  <!-- Порты -->
+  <section id="ports">
+    <h2>Таблица портов команд</h2>
+    <div class="warn-box"><strong>⚠️ Порт 8069 уже занят</strong> существующим Odoo — не использовать!</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Команда</th><th>Порт</th><th>Адрес для входа</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Team 1</td><td><span class="port-badge">8069</span></td><td style="color:var(--text-muted)">занят</td></tr>
+          <tr><td>Team 2</td><td><span class="port-badge">8070</span></td><td><a href="http://204.12.253.210:8070" target="_blank">http://204.12.253.210:8070</a></td></tr>
+          <tr><td>Team 3</td><td><span class="port-badge">8071</span></td><td><a href="http://204.12.253.210:8071" target="_blank">http://204.12.253.210:8071</a></td></tr>
+          <tr><td>Team 4</td><td><span class="port-badge">8072</span></td><td><a href="http://204.12.253.210:8072" target="_blank">http://204.12.253.210:8072</a></td></tr>
+          <tr><td>Team 5</td><td><span class="port-badge">8073</span></td><td><a href="http://204.12.253.210:8073" target="_blank">http://204.12.253.210:8073</a></td></tr>
+          <tr><td>Team 6</td><td><span class="port-badge">8074</span></td><td><a href="http://204.12.253.210:8074" target="_blank">http://204.12.253.210:8074</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Развёртывание -->
+  <section id="deploy">
+    <h2>Развёртывание</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">1</div>
+          <div class="step-title">Создать папку проекта</div>
+        </div>
+        <div class="step-body">
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre>mkdir ~/odoo && cd ~/odoo</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">2</div>
+          <div class="step-title">Создать docker-compose.yml</div>
+        </div>
+        <div class="step-body">
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre>nano docker-compose.yml</pre>
+          </div>
+          <p style="margin-top:12px; font-size:14px; color:var(--text-muted)">Вставить шаблон ниже, заменив <code>НОМЕР</code> на номер команды и <code>ПОРТ</code> на свой порт из таблицы:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">yaml — шаблон</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><span class="key">services</span>:
+
+  <span class="key">db</span>:
+    <span class="key">image</span>: <span class="val">postgres:16</span>
+    <span class="key">container_name</span>: <span class="val">teamНОМЕР-db</span>
+    <span class="key">environment</span>:
+      <span class="key">POSTGRES_USER</span>: <span class="val">odoo</span>
+      <span class="key">POSTGRES_PASSWORD</span>: <span class="val">odoo</span>
+      <span class="key">POSTGRES_DB</span>: <span class="val">postgres</span>
+    <span class="key">volumes</span>:
+      - <span class="val">teamНОМЕР_db_data:/var/lib/postgresql/data</span>
+    <span class="key">restart</span>: <span class="val">unless-stopped</span>
+
+  <span class="key">odoo</span>:
+    <span class="key">image</span>: <span class="val">odoo:18</span>
+    <span class="key">container_name</span>: <span class="val">teamНОМЕР-odoo</span>
+    <span class="key">depends_on</span>:
+      - <span class="val">db</span>
+    <span class="key">ports</span>:
+      - <span class="str">"ПОРТ:8069"</span>
+    <span class="key">environment</span>:
+      <span class="key">HOST</span>: <span class="val">db</span>
+      <span class="key">USER</span>: <span class="val">odoo</span>
+      <span class="key">PASSWORD</span>: <span class="val">odoo</span>
+    <span class="key">volumes</span>:
+      - <span class="val">teamНОМЕР_odoo_data:/var/lib/odoo</span>
+    <span class="key">restart</span>: <span class="val">unless-stopped</span>
+
+<span class="key">volumes</span>:
+  <span class="key">teamНОМЕР_db_data</span>:
+  <span class="key">teamНОМЕР_odoo_data</span>:</pre>
+          </div>
+
+          <h3>Пример для Team 2 (порт 8070)</h3>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">yaml — team2</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre><span class="key">services</span>:
+
+  <span class="key">db</span>:
+    <span class="key">image</span>: <span class="val">postgres:16</span>
+    <span class="key">container_name</span>: <span class="val">team2-db</span>
+    <span class="key">environment</span>:
+      <span class="key">POSTGRES_USER</span>: <span class="val">odoo</span>
+      <span class="key">POSTGRES_PASSWORD</span>: <span class="val">odoo</span>
+      <span class="key">POSTGRES_DB</span>: <span class="val">postgres</span>
+    <span class="key">volumes</span>:
+      - <span class="val">team2_db_data:/var/lib/postgresql/data</span>
+    <span class="key">restart</span>: <span class="val">unless-stopped</span>
+
+  <span class="key">odoo</span>:
+    <span class="key">image</span>: <span class="val">odoo:18</span>
+    <span class="key">container_name</span>: <span class="val">team2-odoo</span>
+    <span class="key">depends_on</span>:
+      - <span class="val">db</span>
+    <span class="key">ports</span>:
+      - <span class="str">"8070:8069"</span>
+    <span class="key">environment</span>:
+      <span class="key">HOST</span>: <span class="val">db</span>
+      <span class="key">USER</span>: <span class="val">odoo</span>
+      <span class="key">PASSWORD</span>: <span class="val">odoo</span>
+    <span class="key">volumes</span>:
+      - <span class="val">team2_odoo_data:/var/lib/odoo</span>
+    <span class="key">restart</span>: <span class="val">unless-stopped</span>
+
+<span class="key">volumes</span>:
+  <span class="key">team2_db_data</span>:
+  <span class="key">team2_odoo_data</span>:</pre>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted)">Сохранить файл: <code>Ctrl+O</code> → <code>Enter</code> → <code>Ctrl+X</code></p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header">
+          <div class="step-num">3</div>
+          <div class="step-title">Запустить контейнеры</div>
+        </div>
+        <div class="step-body">
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre>docker compose up -d</pre>
+          </div>
+          <p style="font-size:14px; color:var(--text-muted); margin-top:8px;">Первый запуск скачает образы — займёт 2–5 минут. Проверить статус:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre>docker compose ps</pre>
+          </div>
+          <div class="info-box">Оба контейнера должны показывать статус <strong>Up</strong>. Если один из них <strong>Exit</strong> — смотри логи: <code>docker compose logs odoo</code></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Первый вход -->
+  <section id="first-login">
+    <h2>Первый вход в Odoo</h2>
+    <p>Открой в браузере свой адрес из таблицы портов. Появится страница создания базы данных.</p>
+    <div class="table-wrap">
+      <table class="form-table">
+        <thead><tr><th>Поле</th><th>Что вводить</th></tr></thead>
+        <tbody>
+          <tr><td class="field">Master Password</td><td>Сгенерируется автоматически — <span class="important">запомни или запиши!</span></td></tr>
+          <tr><td class="field">Database Name</td><td>Любое название, например <code>odoo</code></td></tr>
+          <tr><td class="field">Email</td><td>Твой email — это будет логин администратора</td></tr>
+          <tr><td class="field">Password</td><td>Придумай надёжный пароль</td></tr>
+          <tr><td class="field">Language</td><td>Russian</td></tr>
+          <tr><td class="field">Country</td><td>Russia</td></tr>
+          <tr><td class="field">Demo Data</td><td><span class="important">Выключить!</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">После нажатия <strong>Create Database</strong> подожди 3–5 минут — Odoo инициализирует базу данных.</div>
+  </section>
+
+  <!-- Команды -->
+  <section id="commands">
+    <h2>Полезные команды</h2>
+    <div class="cmd-grid">
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose ps</div>
+        <div class="cmd-desc">Статус контейнеров</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose logs odoo</div>
+        <div class="cmd-desc">Логи Odoo</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose logs -f odoo</div>
+        <div class="cmd-desc">Следить за логами в реальном времени</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose restart odoo</div>
+        <div class="cmd-desc">Перезапустить Odoo</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose down</div>
+        <div class="cmd-desc">Остановить все контейнеры</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose up -d</div>
+        <div class="cmd-desc">Запустить все контейнеры в фоне</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose exec odoo bash</div>
+        <div class="cmd-desc">Зайти внутрь контейнера Odoo</div>
+      </div>
+      <div class="cmd-item">
+        <div class="cmd-code">docker compose exec db bash</div>
+        <div class="cmd-desc">Зайти внутрь контейнера базы данных</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Бэкап -->
+  <section id="backup">
+    <h2>Бэкап и восстановление</h2>
+    <div class="warn-box"><strong>⚠️ Делай бэкап</strong> перед любыми экспериментами с базой!</div>
+
+    <h3>Создать бэкап</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre>docker compose exec db pg_dump -U odoo odoo > backup_$(date +%Y%m%d).sql</pre>
+    </div>
+    <p style="font-size:13px; color:var(--text-muted)">Файл сохранится с датой в названии — например <code>backup_20260315.sql</code></p>
+
+    <h3>Восстановить из бэкапа</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+      <pre>docker compose exec -i db psql -U odoo odoo &lt; backup_20260315.sql</pre>
+    </div>
+  </section>
+
+  <!-- Troubleshoot -->
+  <section id="troubleshoot">
+    <h2>Что делать если что-то сломалось</h2>
+    <div class="trouble-list">
+
+      <div class="trouble-item">
+        <div class="trouble-q">🔴 Контейнер не запускается</div>
+        <div class="trouble-a">
+          Смотри логи — там будет причина:<br>
+          <div class="code-block" style="margin-top:10px;">
+            <div class="code-header"><span class="code-lang">bash</span></div>
+            <pre>docker compose logs odoo</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="trouble-q">🔴 Хочу начать с чистого листа</div>
+        <div class="trouble-a">
+          <span style="color:var(--warn);">⚠️ Удалит контейнеры И все данные!</span>
+          <div class="code-block" style="margin-top:10px;">
+            <div class="code-header"><span class="code-lang">bash</span></div>
+            <pre>docker compose down -v
+docker compose up -d</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="trouble-q">🔴 Контейнер завис</div>
+        <div class="trouble-a">
+          <div class="code-block" style="margin-top:10px;">
+            <div class="code-header"><span class="code-lang">bash</span></div>
+            <pre>docker compose restart odoo</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="trouble-q">🔴 Забыл пароль от Odoo</div>
+        <div class="trouble-a">Зайди в Settings → Users → поменяй пароль через интерфейс.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>По вопросам администрирования — <strong>Никита Томилин</strong> (старший админ) · URFU Project 2026</p>
+  </footer>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
