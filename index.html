@@ -496,7 +496,7 @@
   <!-- Доступ -->
   <section>
     <h2>Доступ к серверу</h2>
-    <p>Для получения SSH доступа напишите старшему админу <strong>Никите Томилину</strong> или Игорю — они выдадут логин и пароль.</p>
+    <p>Для получения SSH доступа напишите мне <strong>@nikitatm333</strong> или <strong>@Igor_V_Tretyakovю</strong>.</p>
     <div class="code-block">
       <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
       <pre>ssh ВАШ_ЛОГИН@204.12.253.210</pre>
@@ -513,14 +513,14 @@
       <li><span class="rule-num">03</span> Используй только свой порт из таблицы ниже</li>
       <li><span class="rule-num">04</span> Называй контейнеры и тома с префиксом своей команды</li>
       <li><span class="rule-num">05</span> Не меняй системные настройки без согласования со старшим админом</li>
-      <li><span class="rule-num">06</span> Делай бэкап перед любыми экспериментами</li>
+      <li><span class="rule-num">06</span> Не забываем делать бэкап БД</li>
     </ul>
   </section>
 
   <!-- Порты -->
   <section id="ports">
     <h2>Таблица портов команд</h2>
-    <div class="warn-box"><strong>⚠️ Порт 8069 уже занят</strong> существующим Odoo — не использовать!</div>
+    <div class="warn-box"><strong>⚠️ Для простоты тут каждая команда пронумерована, индекс команд распределим в чате. Пока без nginx.</div>
     <div class="table-wrap">
       <table>
         <thead>
@@ -546,7 +546,7 @@
       <div class="step">
         <div class="step-header">
           <div class="step-num">1</div>
-          <div class="step-title">Создать папку проекта</div>
+          <div class="step-title">Создать папку проекта (в текушей личной директории) </div>
         </div>
         <div class="step-body">
           <div class="code-block">
@@ -564,6 +564,7 @@
         <div class="step-body">
           <div class="code-block">
             <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            <pre>// Либо другой редактор, либо с помощью scp скинуть yml с хоста на сервер.</pre>
             <pre>nano docker-compose.yml</pre>
           </div>
           <p style="margin-top:12px; font-size:14px; color:var(--text-muted)">Вставить шаблон ниже, заменив <code>НОМЕР</code> на номер команды и <code>ПОРТ</code> на свой порт из таблицы:</p>
@@ -588,7 +589,7 @@
     <span class="key">depends_on</span>:
       - <span class="val">db</span>
     <span class="key">ports</span>:
-      - <span class="str">"ПОРТ:8069"</span>
+      - <span class="str">"ПОРТ:8069 (Поставить порт вашей команды!)"</span>
     <span class="key">environment</span>:
       <span class="key">HOST</span>: <span class="val">db</span>
       <span class="key">USER</span>: <span class="val">odoo</span>
@@ -726,7 +727,7 @@
   <!-- Бэкап -->
   <section id="backup">
     <h2>Бэкап и восстановление</h2>
-    <div class="warn-box"><strong>⚠️ Делай бэкап</strong> перед любыми экспериментами с базой!</div>
+    <div class="warn-box"><strong>⚠️ Не забываем бэкапть БД!</div>
 
     <h3>Создать бэкап</h3>
     <div class="code-block">
@@ -789,7 +790,7 @@ docker compose up -d</pre>
   </section>
 
   <footer>
-    <p>По вопросам администрирования — <strong>Никита Томилин</strong> (старший админ) · URFU Project 2026</p>
+    <p>По вопросам администрирования — <strong>Никита Томилин</strong> @nikitatm333·</p>
   </footer>
 
 </div>
