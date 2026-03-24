@@ -536,6 +536,7 @@ nano docker-compose.yml</pre>
           <div class="code-block">
             <div class="code-header"><span class="code-lang">yaml — шаблон</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
             <pre><span class="key">name</span>: <span class="val">team_Номер</span>
+              
               <span class="key">services</span>:
 
   <span class="key">db</span>:
@@ -572,7 +573,9 @@ nano docker-compose.yml</pre>
           <h3>Пример для Team 2 (порт 8070)</h3>
           <div class="code-block">
             <div class="code-header"><span class="code-lang">yaml — team2</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-            <pre><span class="key">services</span>:
+            <pre><span class="key">name</span>: <span class="val">team_2</span>
+              
+              <span class="key">services</span>:
 
   <span class="key">db</span>:
     <span class="key">image</span>: <span class="val">postgres:16</span>
